@@ -1,0 +1,68 @@
+# ========================
+# Build results
+# ========================
+bin/
+obj/
+out/
+publish/
+
+# ========================
+# Visual Studio / IDE files
+# ========================
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# ========================
+# Logs
+# ========================
+*.log
+
+# ========================
+# Local database files
+# ========================
+*.sqlite
+*.db
+*.mdf
+*.ldf
+
+# ========================
+# NuGet packages
+# ========================
+*.nupkg
+packages/
+# Uncomment if using NuGet Package Restore
+# !packages/build/*.targets
+
+# ========================
+# SSL / Certificates
+# ========================
+*.pfx
+*.key
+*.cer
+
+# ========================
+# Node / Frontend (if any)
+# ========================
+node_modules/
+
+# ========================
+# ASP.NET / web files
+# ========================
+wwwroot/lib/
+
+# ========================
+# Resharper
+# ========================
+_ReSharper*/
+
+# ========================
+# Environment-specific configs
+# ========================
+appsettings.Development.json
+/CurrencyExchange/Properties/launchSettings.json
