@@ -13,12 +13,10 @@
             dbConnectionManager.OpenPersistent();
 
             var dbInitializer = new DatabaseInitializer(connectionString);
+            var currencyDao = new CurrencyDao(connectionString);
 
             builder.Services.AddSingleton(dbConnectionManager);
             builder.Services.AddSingleton(dbInitializer);
-
-            var currencyDao = new CurrencyDao(connectionString);
-
             builder.Services.AddSingleton(currencyDao);
             builder.Services.AddSingleton<CurrencyService>();
             builder.Services.AddSingleton<CurrencyValidator>();
