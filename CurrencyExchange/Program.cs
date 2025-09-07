@@ -2,23 +2,32 @@ namespace CurrencyExchange
 {
     public class Program
     {
-        internal static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            try
+            {
+                var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found!");
+                var startup = new Startup();
 
-            builder.Services.AddControllers();
-            var app = builder.Build();
+                startup.ConfigureServices(builder);
 
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-            app.MapControllers();
+                var app = builder.Build();
 
-            var dbInitializer = new DatabaseInitializer(connectionString);
-            dbInitializer.Init();
-            
-            app.Run();
+                startup.ConfigureMiddleware(app);
+                startup.ConfigureRouting(app);
+                startup.ConfigureApplicationLifetime(app);
+
+                var dbInitializer = app.Services.GetRequiredService<DatabaseInitializer>();
+                dbInitializer.Init();
+
+                app.Run();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при запуске приложения: {ex.Message}");
+                Environment.Exit(1);
+            }
         }
     }
 }

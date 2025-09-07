@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace CurrencyExchange
 {
-    internal class DatabaseInitializer
+    public class DatabaseInitializer
     {
         private readonly string _connectionString;
 
