@@ -1,100 +1,118 @@
 ﻿using Microsoft.Data.Sqlite;
-using SQLitePCL;
 using System.Diagnostics;
 
 namespace CurrencyExchange
 {
-    class DatabaseInitializer
+    internal class DatabaseInitializer
     {
-        public static void Init()
-        {
-            Batteries.Init(); // важно для SQLitePCLRaw
+        private readonly string _connectionString;
 
-            var connectionString = "Data Source=:memory:"; // база в памяти
-            using var connection = new SqliteConnection(connectionString);
+        private static readonly string CreateCurrenciesTable = @"
+            CREATE TABLE currencies (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                code TEXT NOT NULL,
+                name TEXT,
+                sign TEXT
+            );
+        ";
+
+        private static readonly string CreateExchangeRatesTable = @"
+            CREATE TABLE exchange_rates (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                base_currency_id INTEGER NOT NULL,
+                target_currency_id INTEGER NOT NULL,
+                rate REAL NOT NULL,
+                FOREIGN KEY (base_currency_id) REFERENCES currencies(id),
+                FOREIGN KEY (target_currency_id) REFERENCES currencies(id)
+            );
+        ";
+
+        private static readonly string InsertCurrencies = @"
+            INSERT INTO currencies (code, name, sign) VALUES
+            ('USD', 'United States Dollar', '$'),
+            ('EUR', 'Euro', '€'),
+            ('RUB', 'Russian Ruble', '₽');
+        ";
+
+        private static readonly string InsertExchangeRates = @"
+            INSERT INTO exchange_rates (base_currency_id, target_currency_id, rate) VALUES
+            (1, 2, 0.92),   
+            (1, 3, 95.50);  
+        ";
+
+        private static readonly string SelectCurrencies = @"
+            SELECT id, code, name, sign 
+            FROM currencies;
+        ";
+
+        private static readonly string SelectExchangeRates = @"
+            SELECT er.id, c1.code as base, c2.code as target, er.rate
+            FROM exchange_rates er
+            JOIN currencies c1 ON er.base_currency_id = c1.id
+            JOIN currencies c2 ON er.target_currency_id = c2.ID;
+        ";
+
+        public DatabaseInitializer(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+        public void Init()
+        {
+            using var connection = new SqliteConnection(_connectionString);
             connection.Open();
 
-            void ExecuteCommand(string sql)
+            ExecuteCommand(CreateCurrenciesTable, connection);
+            ExecuteCommand(CreateExchangeRatesTable, connection);
+
+            ExecuteCommand(InsertCurrencies, connection);
+            ExecuteCommand(InsertExchangeRates, connection);
+
+            CheckInsertedCurrencies(connection);
+            CheckInsertedExchangeRates(connection);
+        }
+
+        private void ExecuteCommand(string sql, SqliteConnection connection)
+        {
+            try
             {
-                try
-                {
-                    Debug.WriteLine("[SQL EXEC] " + sql);
-                    using var cmd = connection.CreateCommand();
-                    cmd.CommandText = sql;
-                    cmd.ExecuteNonQuery();
-                }
-                catch (SqliteException ex)
-                {
-                    Debug.WriteLine("[SQLite ERROR] " + ex.Message);
-                }
+                Debug.WriteLine("[SQL EXEC] " + sql);
+                using var command = connection.CreateCommand();
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
             }
+            catch (SqliteException ex)
+            {
+                Debug.WriteLine("[SQLite ERROR] " + ex.Message);
+                throw;
+            }
+        }
 
-            // Создание таблицы currencies
-            ExecuteCommand(@"
-                CREATE TABLE IF NOT EXISTS currencies (
-                    ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Code TEXT NOT NULL,
-                    FullName TEXT,
-                    Sign TEXT
-                );
-            ");
-
-            // Создание таблицы exchange_rates
-            ExecuteCommand(@"
-                CREATE TABLE IF NOT EXISTS exchange_rates (
-                    ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                    BaseCurrencyId INTEGER NOT NULL,
-                    TargetCurrencyId INTEGER NOT NULL,
-                    Rate REAL NOT NULL,
-                    FOREIGN KEY (BaseCurrencyId) REFERENCES currencies(ID),
-                    FOREIGN KEY (TargetCurrencyId) REFERENCES currencies(ID)
-                );
-            ");
-
-            // Вставка базовых валют
-            ExecuteCommand(@"
-                INSERT INTO currencies (Code, FullName, Sign) VALUES
-                ('USD', 'United States Dollar', '$'),
-                ('EUR', 'Euro', '€'),
-                ('RUB', 'Russian Ruble', '₽');
-            ");
-
-            // Вставка базовых курсов обмена
-            ExecuteCommand(@"
-                INSERT INTO exchange_rates (BaseCurrencyId, TargetCurrencyId, Rate) VALUES
-                (1, 2, 0.92),   -- USD -> EUR
-                (1, 3, 95.50),  -- USD -> RUB
-            ");
-
-            // Проверка вставки валют
-            Debug.WriteLine("[SQL EXEC] SELECT ID, Code, FullName, Sign FROM currencies;");
-            using var selectCmd = connection.CreateCommand();
-            selectCmd.CommandText = "SELECT ID, Code, FullName, Sign FROM currencies;";
-            using var currenciesReader = selectCmd.ExecuteReader();
+        private void CheckInsertedCurrencies(SqliteConnection connection)
+        {
+            Debug.WriteLine($"[SQL EXEC] {SelectCurrencies}");
+            using var selectCurrenciesCommand = connection.CreateCommand();
+            selectCurrenciesCommand.CommandText = SelectCurrencies;
+            using var currenciesReader = selectCurrenciesCommand.ExecuteReader();
             while (currenciesReader.Read())
             {
-                var id = currenciesReader.GetInt32(0);
-                var code = currenciesReader.GetString(1);
-                var fullName = currenciesReader.GetString(2);
-                var sign = currenciesReader.GetString(3);
-                Debug.WriteLine($"ID: {id}, Code: {code}, FullName: {fullName}, Sign: {sign}");
+                var id = currenciesReader.GetInt64(currenciesReader.GetOrdinal("id"));
+                var code = currenciesReader.GetString(currenciesReader.GetOrdinal("code"));
+                var name = currenciesReader.GetString(currenciesReader.GetOrdinal("name"));
+                var sign = currenciesReader.GetString(currenciesReader.GetOrdinal("sign"));
+                Debug.WriteLine($"ID: {id}, Code: {code}, Name: {name}, Sign: {sign}");
             }
+        }
 
-            // Проверка вставки курсов
+        private void CheckInsertedExchangeRates(SqliteConnection connection)
+        {
             Debug.WriteLine("[CHECK] exchange_rates:");
-            using (var cmd = connection.CreateCommand())
+            using var selectRatesCommand = connection.CreateCommand();
+            selectRatesCommand.CommandText = SelectExchangeRates;
+            using var ratesReader = selectRatesCommand.ExecuteReader();
+            while (ratesReader.Read())
             {
-                cmd.CommandText = @"
-                    SELECT er.ID, c1.Code as Base, c2.Code as Target, er.Rate
-                    FROM exchange_rates er
-                    JOIN currencies c1 ON er.BaseCurrencyId = c1.ID
-                    JOIN currencies c2 ON er.TargetCurrencyId = c2.ID;
-                ";
-                using var ratesReader = cmd.ExecuteReader();
-                while (ratesReader.Read())
-                {
-                    Debug.WriteLine($"ID: {ratesReader.GetInt32(0)}, {ratesReader.GetString(1)} -> {ratesReader.GetString(2)}, Rate: {ratesReader.GetDouble(3)}");
-                }
+                Debug.WriteLine($"ID: {ratesReader.GetInt32(0)}, {ratesReader.GetString(1)} -> {ratesReader.GetString(2)}, Rate: {ratesReader.GetDouble(3)}");
             }
         }
     }
