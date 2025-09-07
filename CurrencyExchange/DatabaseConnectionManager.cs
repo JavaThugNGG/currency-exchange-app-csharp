@@ -3,23 +3,23 @@
     public class DatabaseConnectionManager : IDisposable
     {
         private readonly string _connectionString;
-        public Microsoft.Data.Sqlite.SqliteConnection Connection { get; private set; }
+        private readonly Microsoft.Data.Sqlite.SqliteConnection _connection;
 
         public DatabaseConnectionManager(string connectionString)
         {
             _connectionString = connectionString;
-            Connection = new Microsoft.Data.Sqlite.SqliteConnection(_connectionString);
+            _connection = new Microsoft.Data.Sqlite.SqliteConnection(_connectionString);
         }
 
-        public void Open()
+        public void OpenPersistent()
         {
-            Connection.Open();
+            _connection.Open();
         }
 
         public void Dispose()
         {
-            Connection?.Close();
-            Connection?.Dispose();
+            _connection?.Close();
+            _connection?.Dispose();
         }
     }
 

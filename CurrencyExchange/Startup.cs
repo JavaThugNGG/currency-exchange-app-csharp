@@ -10,7 +10,7 @@
                                    ?? throw new InvalidOperationException("Connection string 'Default' not found!");
 
             var dbConnectionManager = new DatabaseConnectionManager(connectionString);
-            dbConnectionManager.Open();
+            dbConnectionManager.OpenPersistent();
 
             var dbInitializer = new DatabaseInitializer(connectionString);
 
@@ -35,12 +35,6 @@
             app.MapControllers();
         }
 
-        private void ConfigureStaticFiles(WebApplication app)
-        {
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-        }
-
         public void ConfigureApplicationLifetime(WebApplication app)
         {
             var lifetime = app.Services.GetRequiredService<IHostApplicationLifetime>();
@@ -50,6 +44,12 @@
             {
                 dbManager.Dispose();
             });
+        }
+
+        private void ConfigureStaticFiles(WebApplication app)
+        {
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }
