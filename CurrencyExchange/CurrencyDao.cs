@@ -16,7 +16,8 @@ namespace CurrencyExchange
             var query = @"
                 SELECT *
                 FROM currencies 
-                WHERE code = @code;";
+                WHERE code = @code;
+            ";
 
             try
             {
@@ -50,7 +51,8 @@ namespace CurrencyExchange
             IList<CurrencyDto> currencies = new List<CurrencyDto>();
             var query = @"
                 SELECT *
-                FROM currencies;";
+                FROM currencies;
+            ";
 
             try
             {
@@ -85,7 +87,8 @@ namespace CurrencyExchange
             string query = @"
                 INSERT INTO currencies (name, code, sign)
                 VALUES (@name, @code, @sign)
-                RETURNING id;";
+                RETURNING id;
+            ";
 
             try
             {
@@ -110,7 +113,8 @@ namespace CurrencyExchange
             string query = @"
                 SELECT COUNT(*)
                 FROM currencies
-                WHERE code = @code;";
+                WHERE code = @code;
+            ";
 
             try
             {
