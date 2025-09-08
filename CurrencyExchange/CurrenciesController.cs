@@ -23,7 +23,7 @@ namespace CurrencyExchange
         }
 
         [HttpPost]
-        public IActionResult InsertCurrency([FromForm] string code, [FromForm] string name, [FromForm] string sign)//валидацию параметров добавишь
+        public IActionResult InsertCurrency([FromForm] string code, [FromForm] string name, [FromForm] string sign)
         {
             _currencyValidator.ValidateParameters(code, name, sign);
             CurrencyDto currency = _currencyService.AddCurrency(name, code, sign);
