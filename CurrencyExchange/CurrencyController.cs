@@ -8,13 +8,11 @@ namespace CurrencyExchange
     {
         private readonly CurrencyService _currencyService;
         private readonly CurrencyValidator _currencyValidator;
-        private readonly CurrencyProcessor _currencyProcessor;
 
-        public CurrencyController(CurrencyService currencyService, CurrencyValidator currencyValidator, CurrencyProcessor currencyProcessor)
+        public CurrencyController(CurrencyService currencyService, CurrencyValidator currencyValidator)
         {
             _currencyService = currencyService;
             _currencyValidator = currencyValidator;
-            _currencyProcessor = currencyProcessor;
         }
 
         [HttpGet("{code}", Name = "GetCurrencyByCode")]//валидацию тут можно сделать, мб уберешь класс-валидатор свой

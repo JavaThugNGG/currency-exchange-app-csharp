@@ -20,7 +20,6 @@
             builder.Services.AddSingleton(currencyDao);
             builder.Services.AddSingleton<CurrencyService>();
             builder.Services.AddSingleton<CurrencyValidator>();
-            builder.Services.AddSingleton<CurrencyProcessor>();
         }
 
         public void ConfigureMiddleware(WebApplication app)
