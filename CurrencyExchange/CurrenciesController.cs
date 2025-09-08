@@ -7,10 +7,12 @@ namespace CurrencyExchange
     public class CurrenciesController : ControllerBase
     {
         private readonly CurrencyService _currencyService;
+        private readonly CurrencyValidator _currencyValidator;
 
-        public CurrenciesController(CurrencyService currencyService)
+        public CurrenciesController(CurrencyService currencyService, CurrencyValidator currencyValidator)
         {
             _currencyService = currencyService;
+            _currencyValidator = currencyValidator;
         }
 
         [HttpGet]
@@ -23,12 +25,10 @@ namespace CurrencyExchange
         [HttpPost]
         public IActionResult InsertCurrency([FromForm] string code, [FromForm] string name, [FromForm] string sign)//валидацию параметров добавишь
         {
+            _currencyValidator.ValidateParameters(code, name, sign);
             CurrencyDto currency = _currencyService.AddCurrency(name, code, sign);
-            return CreatedAtRoute(
-                "GetCurrencyByCode",
-                new { code = currency.Code },
-                currency
-            );
+
+            return CreatedAtRoute("GetCurrencyByCode", new { code = currency.Code }, currency);
         }
     }
 }
