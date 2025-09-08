@@ -1,6 +1,7 @@
 ﻿namespace CurrencyExchange
 {
-    public record CurrencyDto(
+    public record CurrencyDto
+    (
         long Id,
         string Name,
         string Code,
