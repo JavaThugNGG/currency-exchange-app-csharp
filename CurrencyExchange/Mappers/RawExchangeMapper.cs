@@ -1,6 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CurrencyExchange.Dto;
+using Microsoft.Data.Sqlite;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Mappers
 {
     public class RawExchangeMapper
     {

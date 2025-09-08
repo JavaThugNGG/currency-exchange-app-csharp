@@ -1,4 +1,9 @@
-﻿namespace CurrencyExchange
+﻿using CurrencyExchange.Dao;
+using CurrencyExchange.Dto;
+using CurrencyExchange.Processors;
+using CurrencyExchange.Exceptions;
+
+namespace CurrencyExchange.Services
 {
     public class ExchangeService
     {

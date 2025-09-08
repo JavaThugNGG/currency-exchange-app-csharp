@@ -1,4 +1,4 @@
-﻿namespace CurrencyExchange
+﻿namespace CurrencyExchange.Dto
 {
     public record ExchangeRateDto(
         long Id,

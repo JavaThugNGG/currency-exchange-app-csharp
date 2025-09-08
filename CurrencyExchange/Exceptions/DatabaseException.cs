@@ -1,4 +1,4 @@
-﻿namespace CurrencyExchange
+﻿namespace CurrencyExchange.Exceptions
 {
     public class DatabaseException : Exception
     {

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using CurrencyExchange.Exceptions;
+using System.Net;
 using System.Text.Json;
 
 namespace CurrencyExchange

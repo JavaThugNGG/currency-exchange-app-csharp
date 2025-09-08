@@ -1,4 +1,8 @@
-﻿namespace CurrencyExchange
+﻿using CurrencyExchange.Dao;
+using CurrencyExchange.Dto;
+using CurrencyExchange.Exceptions;
+
+namespace CurrencyExchange.Services
 {
     public class ExchangeRateService
     {

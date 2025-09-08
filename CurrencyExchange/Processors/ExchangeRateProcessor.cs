@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Processors
 {
     public class ExchangeRateProcessor
     {

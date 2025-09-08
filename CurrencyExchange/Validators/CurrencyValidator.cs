@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Validators
 {
     public class CurrencyValidator
     {

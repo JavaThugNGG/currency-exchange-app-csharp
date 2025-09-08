@@ -1,6 +1,9 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CurrencyExchange.Dto;
+using CurrencyExchange.Mappers;
+using Microsoft.Data.Sqlite;
+using CurrencyExchange.Exceptions;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Dao
 {
     public class ExchangeDao
     {
@@ -15,7 +18,7 @@ namespace CurrencyExchange
 
         public RawExchangeDto GetRate(string baseCurrencyCode, string targetCurrencyCode, decimal amount)
         {
-            String query = @"
+            string query = @"
                 SELECT c1.id AS baseId,
                     c1.name AS baseName,
                     c1.code AS baseCode,

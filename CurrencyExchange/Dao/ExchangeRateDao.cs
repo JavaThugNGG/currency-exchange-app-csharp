@@ -1,6 +1,9 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CurrencyExchange.Dto;
+using CurrencyExchange.Mappers;
+using Microsoft.Data.Sqlite;
+using CurrencyExchange.Exceptions;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Dao
 {
     public class ExchangeRateDao
     {
@@ -16,7 +19,7 @@ namespace CurrencyExchange
         public IList<ExchangeRateDto> GetAllRates()
         {
             IList<ExchangeRateDto> exchangeRates = new List<ExchangeRateDto>();
-            String query = @"
+            string query = @"
                 SELECT er.id AS rateId,
                     er.rate AS rate,
                     c1.id AS baseId,

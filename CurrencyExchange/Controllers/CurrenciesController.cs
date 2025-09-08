@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CurrencyExchange.Dto;
+using CurrencyExchange.Services;
+using CurrencyExchange.Validators;
+using Microsoft.AspNetCore.Mvc;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Controllers
 {
     [ApiController]
     [Route("currencies")]

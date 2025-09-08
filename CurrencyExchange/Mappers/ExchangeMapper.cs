@@ -1,4 +1,6 @@
-﻿namespace CurrencyExchange
+﻿using CurrencyExchange.Dto;
+
+namespace CurrencyExchange.Mappers
 {
     public class ExchangeMapper
     {

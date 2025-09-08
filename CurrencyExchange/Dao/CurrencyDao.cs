@@ -1,6 +1,8 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CurrencyExchange.Dto;
+using Microsoft.Data.Sqlite;
+using CurrencyExchange.Exceptions;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Dao
 {
     public class CurrencyDao
     {

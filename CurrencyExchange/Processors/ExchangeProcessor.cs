@@ -1,6 +1,9 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CurrencyExchange.Dto;
+using CurrencyExchange.Mappers;
+using Microsoft.Data.Sqlite;
+using CurrencyExchange.Exceptions;
 
-namespace CurrencyExchange
+namespace CurrencyExchange.Processors
 {
     public class ExchangeProcessor
     {

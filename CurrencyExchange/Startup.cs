@@ -1,4 +1,10 @@
-﻿namespace CurrencyExchange
+﻿using CurrencyExchange.Dao;
+using CurrencyExchange.Mappers;
+using CurrencyExchange.Processors;
+using CurrencyExchange.Services;
+using CurrencyExchange.Validators;
+
+namespace CurrencyExchange
 {
     public class Startup
     {
