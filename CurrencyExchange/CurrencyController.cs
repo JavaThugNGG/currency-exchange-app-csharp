@@ -17,7 +17,7 @@ namespace CurrencyExchange
             _currencyProcessor = currencyProcessor;
         }
 
-        [HttpGet("{code}")]//валидацию тут можно сделать, мб уберешь класс-валидатор свой
+        [HttpGet("{code}", Name = "GetCurrencyByCode")]//валидацию тут можно сделать, мб уберешь класс-валидатор свой
         public IActionResult GetCurrency(string code)
         {
             _currencyValidator.ValidateCode(code);
