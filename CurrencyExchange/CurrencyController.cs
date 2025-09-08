@@ -15,13 +15,11 @@ namespace CurrencyExchange
             _currencyValidator = currencyValidator;
         }
 
-        [HttpGet("{code}", Name = "GetCurrencyByCode")]//валидацию тут можно сделать, мб уберешь класс-валидатор свой
+        [HttpGet("{code}", Name = "GetCurrencyByCode")]
         public IActionResult GetCurrency(string code)
         {
             _currencyValidator.ValidateCode(code);
-
             CurrencyDto currency = _currencyService.GetCurrency(code);
-
             return Ok(currency);
         }
     }
