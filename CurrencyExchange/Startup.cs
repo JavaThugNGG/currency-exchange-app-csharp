@@ -12,18 +12,28 @@
             var dbConnectionManager = new DatabaseConnectionManager(connectionString);
             dbConnectionManager.OpenPersistent();
 
-            var dbInitializer = new DatabaseInitializer(connectionString);
-            var currencyDao = new CurrencyDao(connectionString);
-
+            builder.Services.AddSingleton(connectionString);
             builder.Services.AddSingleton(dbConnectionManager);
-            builder.Services.AddSingleton(dbInitializer);
-            builder.Services.AddSingleton(currencyDao);
+            builder.Services.AddSingleton<DatabaseInitializer>();
+            builder.Services.AddSingleton<CurrencyDao>();
+            builder.Services.AddSingleton<RawExchangeMapper>();
+            builder.Services.AddSingleton<ExchangeMapper>();
+            builder.Services.AddSingleton<ExchangeDao>();
+            builder.Services.AddSingleton<ExchangeRateDao>();
             builder.Services.AddSingleton<CurrencyService>();
+            builder.Services.AddSingleton<ExchangeService>();
+            builder.Services.AddSingleton<ExchangeRateService>();
             builder.Services.AddSingleton<CurrencyValidator>();
+            builder.Services.AddSingleton<ExchangeValidator>();
+            builder.Services.AddSingleton<ExchangeRateValidator>();
+            builder.Services.AddSingleton<ExchangeRateProcessor>();
+            builder.Services.AddSingleton<ExchangeProcessor>();
+            builder.Services.AddSingleton<ExchangeRateMapper>();
         }
 
         public void ConfigureMiddleware(WebApplication app)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
             ConfigureStaticFiles(app);
         }
 
