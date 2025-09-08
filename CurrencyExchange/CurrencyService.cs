@@ -14,20 +14,20 @@
             return _currencyDao.GetCurrency(code);
         }
 
-        /*internal IList<CurrencyDto> GetAllCurrencies()
+        public IList<CurrencyDto> GetAllCurrencies()
         {
             return _currencyDao.GetAllCurrencies();
         }
 
-        internal CurrencyDto AddCurrency(string fullName, string code, string sign)
+        public CurrencyDto AddCurrency(string name, string code, string sign)
         {
             if (_currencyDao.IsCurrencyExists(code))
             {
                 throw new ElementAlreadyExistsException("Данная валюта уже существует");
             }
 
-            long id = _currencyDao.InsertCurrency(fullName, code, sign);
-            return new CurrencyDto(id, fullName, code, sign);
-        }*/
+            long id = _currencyDao.InsertCurrency(name, code, sign);
+            return new CurrencyDto(id, name, code, sign);
+        }
     }
 }
