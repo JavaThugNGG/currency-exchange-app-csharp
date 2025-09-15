@@ -7,7 +7,7 @@ REST API для описания валют и обменных курсов. П
 ---
 
 Приложение написано на языке C# в ООП-стиле с использованием:
-- ASP.NET Core MVC
+- ASP.NET Core WebApi
 - REST API
 - SQLite
 - Deploy in VPS (Ubuntu 20.04)
